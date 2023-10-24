@@ -1,0 +1,65 @@
+/* Estilo Javascript */
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+input.error {
+    border: 2px solid red;
+}
+
+/* Estilo para el contenedor del formulario */
+
+.container {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+
+/* Estilo para el formulario dentro del contenedor */
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Estilo para las etiquetas (labels) del formulario */
+
+label {
+    text-align: left;
+}
+
+
+/* Estilo para los campos de entrada de texto */
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+
+/* Estilo para el botón de inicio de sesión */
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
