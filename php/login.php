@@ -1,33 +1,34 @@
 <?php
 session_start();
 include 'connection.php';
+if (!isset($_POST['login'])) {
 
-if (empty($_SESSION['email'])) {
     header('Location: ../index.php');
-}
-if (!isset($_POST['enviar'])) {
-    
+
+} else {
     $user=$_POST['email'];
     $pwd=$_POST['pwd'];
-
-$pwdenc = hash("sha256", $pwd);
-
-$select = "SELECT * FROM tbl_login where nombre_login = '$user'";
-$sele= mysqli_query($connection, $select);
-$seleL = mysqli_num_rows($sele);
-
-if ($seleL == 1) {
-    $seleF=mysqli_fetch_array($sele);
-    if ($seleF['nombre_login'] == $user && $pwdenc == $seleF['password_login']) {
-        $_SESSION['user']=$user;
-        $_SESSION['pwd']=$pwd;
-        header('Location: ./mostrar.php?alu=1');
+    
+    $pwdenc = hash("sha256", $pwd);
+    
+    $sql = "SELECT * FROM tbl_login where nombre_login = '$user'";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_execute($stmt);
+    $resul1 = mysqli_stmt_get_result($stmt);
+    
+    if (mysqli_num_rows($resul1) == 1) {
+        $login = mysqli_fetch_assoc($resul1);
+        if ($login['nombre_login'] == $user && $pwdenc == $login['password_login']) {
+            $_SESSION['user']=$user;
+            $_SESSION['pwd']=$pwd;
+            echo "mostrar.php";
+            // header('Location: ./mostrar.php');
+        } else {
+            header('Location: ../index.php?fallo=false');
+        }
     } else {
-        header('Location: ../index.php?fallo=false');
+        echo "no Existe";
+        header('Location: ../index.php?exist=0');
     }
-} else {
-    header('Location: ../index.php?exist=0');
-    echo "Rellename el usuario y la contraseña";
+    
 }
-
-} 
