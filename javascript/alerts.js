@@ -1,12 +1,12 @@
 // Función que se ejecutará si el parámetro "fallo" está presente en la URL
 function Errorpwd() {
     // Coloca aquí el código que deseas ejecutar cuando "fallo" está presente
-    const alertPlaceholder = document.getElementById('alerta');
+    const alertPlaceholder = document.getElementById('pwderror');
 
     const appendAlert = (mensaje, tipo) => {
         const alerta = document.createElement('div');
         alerta.innerHTML = [
-            `<div id="alerta" class="alert alert-${tipo} alert-dismissible" role="alert">`,
+            `<div id="pwderror" class="alert alert-${tipo} alert-dismissible" role="alert">`,
             `   <div>${mensaje}</div><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`,
         ].join('');
         alertPlaceholder.append(alerta);

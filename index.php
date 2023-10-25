@@ -32,7 +32,7 @@
                         <label class="form-label" for="pwd"><b>Password</b></label>
                         <input type="password" name="pwd" id="pwd" class="form-control" placeholder="Inserta aquí la contraseña..." onblur="validarCampo(this, 'loginBtn')"/>
                         <?php if (isset($_GET['fallo'])) {
-                            echo "<div id='alerta'></div>";
+                            echo "<div id='pwderror'></div>";
                             }?>
                     </div>
 
@@ -41,9 +41,9 @@
                     <input type="submit" name="login" value="Login" class="btn btn-primary btn-block mb-4 " id="loginBtn" disabled>
 
                     <!-- Register button -->
-                    <div class="text-center">
+<!--                     <div class="text-center">
                         <p>¿No eres miembro? <a href="./php/registrar.php">Regístrate</a></p>
-                    </div>
+                    </div> -->
                 </form>
             </div>
     </div>

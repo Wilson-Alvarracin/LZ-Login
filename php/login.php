@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once('./funciones.php');
 include 'connection.php';
 if (!isset($_POST['login'])) {
 
@@ -21,8 +22,7 @@ if (!isset($_POST['login'])) {
         if ($login['nombre_login'] == $user && $pwdenc == $login['password_login']) {
             $_SESSION['user']=$user;
             $_SESSION['pwd']=$pwd;
-            echo "mostrar.php";
-            // header('Location: ./mostrar.php');
+            header('Location: ./mostrar.php');
         } else {
             header('Location: ../index.php?fallo=false');
         }
