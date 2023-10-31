@@ -35,7 +35,7 @@
                             echo "<div id='pwderror'></div>";
                             }?>
                     </div>
-
+                    
                     <!-- Botón de enviar -->
                     <div id="mensajeError" class="error"></div>
                     <input type="submit" name="login" value="Login" class="btn btn-primary btn-block mb-4 " id="loginBtn" disabled>
