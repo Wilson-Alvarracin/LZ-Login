@@ -79,10 +79,26 @@ input[type="submit"]:hover {
     /* Bordes redondeados */
     padding: 40px;
     /* Centrar el recuadro horizontalmente */
-    width: 300px;
-    /* Ancho deseado del recuadro */
-    /* Sombra */
     background-color: white;
+}
+
+
+
+/* Estilo para pantallas más pequeñas (por ejemplo, dispositivos móviles) */
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column-reverse;
+        /* Cambiar dirección de la fila */
+    }
+    .col-md-6 {
+        width: 100%;
+        /* Ancho completo para ocupar toda la pantalla */
+    }
+    .custom-form-container {
+        padding: 20px;
+        /* Reducir el relleno en pantallas pequeñas */
+    }
 }
 
 #pwderror {

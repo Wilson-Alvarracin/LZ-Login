@@ -16,7 +16,7 @@
     <div class="row justify-content-center">
             <div class="custom-form-container">
                 <form action="./php/login.php" method="post" onsubmit="return validarFormulario()">
-                    <img src="./img/zorrito_logo.png" alt="">
+                    <img src="./img/zorrito_logo.png" alt="Imagen">
                     <!-- Email input -->
                     <div class="form-outline mb-3">
                         <label class="form-label" for="email" id="email"><b>Correo electrónico</b></label>
