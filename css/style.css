@@ -82,7 +82,9 @@ input[type="submit"]:hover {
     background-color: white;
 }
 
-
+.column-2 {
+    width: 50%;
+}
 
 /* Estilo para pantallas más pequeñas (por ejemplo, dispositivos móviles) */
 
@@ -141,6 +143,9 @@ input[type="submit"]:hover {
         background-position: 100% 50%;
     }
     100% {
+        background-position: 0% 50%;
+    }
+}% {
         background-position: 0% 50%;
     }
 }
