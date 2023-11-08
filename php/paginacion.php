@@ -1,38 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    
 <?php
 // Conexión a la base de datos
-$conexion = mysqli_connect("172.24.1.28", "zorrito", "QWEqwe123", "bd_zorritos");
+include('connection.php');
 
-if (!$conexion) {
-    die("Error al conectar a la base de datos: " . mysqli_connect_error());
-}
+// Obtener el número total de alumnos en la base de datos
+$consulta_total_alumnos = "SELECT COUNT(*) as total FROM tbl_alumnos";
+$resultado_total = mysqli_query($conexion, $consulta_total_alumnos);
+$total_alumnos = mysqli_fetch_assoc($resultado_total)['total'];
 
-if (isset($_POST['cantidad'])) {
-    $cantidad = $_POST['cantidad'];
+// Obtener el número de página actual
+$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 
-    // Realizar una consulta SQL para obtener los primeros $cantidad alumnos
-    $consulta = "SELECT * FROM tbl_alumnos LIMIT $cantidad";
-    $resultado = mysqli_query($conexion, $consulta);
+// Calcular el índice de inicio para la consulta
+$por_pagina = isset($_GET['cantidad']) ? (int)$_GET['cantidad'] : 10; // Puedes ajustar este número por defecto según tus preferencias
+$inicio = ($pagina_actual - 1) * $por_pagina;
 
-    if ($resultado) {
-        // Mostrar los datos de los alumnos
-        echo "<h2>Lista de Alumnos</h2>";
-        echo "<ul>";
-        while ($fila = mysqli_fetch_assoc($resultado)) {
-            echo "<li>{$fila['nombre']} {$fila['apellidos']} - Nacido el {$fila['fecha_nacimiento']} - Correo: {$fila['correo_electronico']}</li>";
-        }
-        echo "</ul>";
-    } else {
-        echo "Error en la consulta: " . mysqli_error($conexion);
+// Realizar una consulta SQL para obtener los alumnos de la página actual
+$consulta = "SELECT * FROM tbl_alumnos LIMIT $inicio, $por_pagina";
+$resultado = mysqli_query($conexion, $consulta);
+
+if ($resultado) {
+    // Mostrar los datos de los alumnos
+    echo "<h2>Lista de Alumnos</h2>";
+    echo "<ul>";
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        echo "<li>{$fila['nombre']} {$fila['apellidos']} - Nacido el {$fila['fecha_nacimiento']} - Correo: {$fila['correo_electronico']}</li>";
     }
-
-    // Cerrar la conexión a la base de datos
-    mysqli_close($conexion);
+    echo "</ul>";
+} else {
+    echo "Error en la consulta: " . mysqli_error($conexion);
 }
+
+// Mostrar el formulario para ajustar el número de alumnos por página
+echo "<form method='get' action='paginacion.php'>";
+echo "Número de alumnos por página: <input type='number' name='cantidad' value='$por_pagina'>";
+echo "<input type='submit' value='Actualizar'>";
+echo "</form>";
+
+// Mostrar enlaces de paginación
+echo "<div class='paginacion'>";
+for ($i = 1; $i <= ceil($total_alumnos / $por_pagina); $i++) {
+    echo "<a href='paginacion.php?pagina=$i&cantidad=$por_pagina'>$i</a> ";
+}
+echo "</div>";
+
+// Cerrar la conexión a la base de datos
+mysqli_close($conexion);
 ?>
 
-<!-- Formulario para ingresar la cantidad de alumnos a mostrar -->
-<form method="post" action="">
-    <label for="cantidad">Número de alumnos a mostrar:</label>
-    <input type="number" name="cantidad" id="cantidad">
-    <input type="submit" value="Filtrar">
-</form>
+</body>
+</html>
