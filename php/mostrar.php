@@ -18,9 +18,7 @@ include 'connection.php';
     <title>Alumno</title>
 </head>
 <body>
-    <?php
-    //comentario de prueba
-    echo "texto de ejemplo";    
+    <?php 
     if ($_SESSION['user'] == "admin@fje.edu") {
         if (!isset($_POST["materia"]) || $_POST['materia'] == "Todo") {
             // Mostrar todas las materias si no se ha seleccionado ninguna    
