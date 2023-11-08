@@ -34,12 +34,9 @@ include 'connection.php';
                 $sqlNombre = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                         FROM tbl_alumnos a
                         INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
-                        WHERE a.nombre LIKE '%?%'";
-                $stmtNombre = mysqli_prepare($conn, $sqlNombre);
-                mysqli_stmt_bind_param($stmtNombre, "s", $nombreBuscar);
-                mysqli_stmt_execute($stmtNombre);
-                $resultNombre = mysqli_stmt_get_result($stmtNombre);
-            }
+                        WHERE a.nombre LIKE '%$nombreBuscar%'";
+                $resultNombre = mysqli_query($conn, $sqlNombre);
+            }            
         } else {
             // Filtrar por materia si se ha seleccionado una
             $materiaSeleccionada = $_POST['materia'];
@@ -72,6 +69,8 @@ include 'connection.php';
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
+<br>
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>;        
 <br>
 <table class="table">
     <thead class="table-dark">
