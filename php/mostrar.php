@@ -18,8 +18,7 @@ include 'connection.php';
     <title>Alumno</title>
 </head>
 <body>
-    <?php
-    //comentario de prueba
+    <?php 
     if ($_SESSION['user'] == "admin@fje.edu") {
         if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {
             // Filtrar por materia si se ha seleccionado una
