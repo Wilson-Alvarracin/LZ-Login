@@ -21,34 +21,53 @@ include 'connection.php';
     <?php
     
     if ($_SESSION['user'] == "admin@fje.edu") {
-        if (!isset($_POST["materia"]) || $_POST['materia'] == "Todo") {
-            // Mostrar todas las materias si no se ha seleccionado ninguna    
-            $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
-            FROM tbl_alumnos a
-            INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            if (isset($_POST['buscar_nombre'])) {
-                $nombreBuscar = mysqli_real_escape_string($conn, $_POST['buscar_nombre']);
-                $sqlNombre = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
-                        FROM tbl_alumnos a
-                        INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
-                        WHERE a.nombre LIKE '%?%'";
-                $stmtNombre = mysqli_prepare($conn, $sqlNombre);
-                mysqli_stmt_bind_param($stmtNombre, "s", $nombreBuscar);
-                mysqli_stmt_execute($stmtNombre);
-                $resultNombre = mysqli_stmt_get_result($stmtNombre);
-            }
-        } else {
+        if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {
             // Filtrar por materia si se ha seleccionado una
-            $materiaSeleccionada = $_POST['materia'];
+            $filtroMateria = $_POST["materia"];
+        } else {
+            $filtroMateria = null;
+        }
+        
+        if (isset($_POST["buscar_nombre"])) {
+            // Filtrar por nombre si se ha ingresado un nombre
+            $filtroNombre = '%' . $_POST["buscar_nombre"] . '%';
+        } else {
+            $filtroNombre = null;
+        }
+        
+        if ($filtroMateria || $filtroNombre) {
+            // Consulta SQL con filtro de materia y/o nombre
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                     FROM tbl_alumnos a
                     INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
-                    WHERE n.materia = ?";
+                    WHERE 1=1";
+            
+            if ($filtroMateria) {
+                $sql .= " AND n.materia = ?";
+            }
+            
+            if ($filtroNombre) {
+                $sql .= " AND a.nombre LIKE ?";
+            }
+        
             $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "s", $materiaSeleccionada);
+        
+            if ($filtroMateria && $filtroNombre) {
+                mysqli_stmt_bind_param($stmt, "ss", $filtroMateria, $filtroNombre);
+            } elseif ($filtroMateria) {
+                mysqli_stmt_bind_param($stmt, "s", $filtroMateria);
+            } else {
+                mysqli_stmt_bind_param($stmt, "s", $filtroNombre);
+            }
+        
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+        } else {
+            // Consulta SQL sin filtro (mostrar todos los resultados)
+            $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
+                    FROM tbl_alumnos a
+                    INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
+            $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         }
@@ -61,10 +80,7 @@ include 'connection.php';
 <form method="post">
     <label for="buscar_nombre">Buscar por Nombre:</label>
     <input type="text" id="buscar_nombre" name="buscar_nombre">
-    <button type="submit" name="filtro_nombre" value="Filtrar">Filtrar</button>
-</form>
-<form method="post">
-<label for="materia">Buscar por Materia:</label>
+    <label for="materia">Buscar por Materia:</label>
     <select name="materia">
         <option value="Todo">Todo</option>
         <option value="Matemáticas">Matemáticas</option>
