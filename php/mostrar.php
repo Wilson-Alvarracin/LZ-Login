@@ -17,9 +17,10 @@ include 'connection.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>Alumno</title>
 </head>
-<body> 
+<body>
     <?php
-    if ($_SESSION['user'] == "admin@fje.edu") {    
+    
+    if ($_SESSION['user'] == "admin@fje.edu") {
         if (!isset($_POST["materia"]) || $_POST['materia'] == "Todo") {
             // Mostrar todas las materias si no se ha seleccionado ninguna    
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
@@ -28,6 +29,17 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
+            if (isset($_POST['buscar_nombre'])) {
+                $nombreBuscar = mysqli_real_escape_string($conn, $_POST['buscar_nombre']);
+                $sqlNombre = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
+                        FROM tbl_alumnos a
+                        INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
+                        WHERE a.nombre LIKE '%?%'";
+                $stmtNombre = mysqli_prepare($conn, $sqlNombre);
+                mysqli_stmt_bind_param($stmtNombre, "s", $nombreBuscar);
+                mysqli_stmt_execute($stmtNombre);
+                $resultNombre = mysqli_stmt_get_result($stmtNombre);
+            }
         } else {
             // Filtrar por materia si se ha seleccionado una
             $materiaSeleccionada = $_POST['materia'];
@@ -40,6 +52,7 @@ include 'connection.php';
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         }
+
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
