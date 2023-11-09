@@ -24,7 +24,6 @@ include 'connection.php';
     <div class="login-card center-mostrar">
         <div class="row custom-form-container container">
             <div class="responsive-img-center">
-            
             <form action="./mostrar.php" method='post' style="text-align: right;">
             <button type="submit" name="Media" value="Media">Volver</button>
             </form>
