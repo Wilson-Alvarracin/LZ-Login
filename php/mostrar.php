@@ -79,6 +79,11 @@ include 'connection.php';
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
+<!-- Botón de Media -->
+<form action="./media.php" method='post' style="text-align: right;">
+<button type="submit" name="Media" value="Media">Media</button>
+</form>
+<!--Final-->
 <br>
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>;        
 <br>
