@@ -62,8 +62,7 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        }
-
+        } 
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
@@ -80,6 +79,8 @@ include 'connection.php';
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
+<br>
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>;        
 <br>
 <table class="table">
     <thead class="table-dark">

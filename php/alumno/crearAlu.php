@@ -17,10 +17,15 @@
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
         <br>
-        <label for="email">Correo Electrónico:</label>
-        <input type="email" id="email" name="email" required>
+        <label for="correo_electronico">Correo Electrónico:</label>
+        <input type="email" id="correo_electronico" name="correo_electronico" required>
         <br>
         <input type="submit" name="crear_alumno" value="Crear Alumno">
     </form>
+    <?php
+    if (isset($_GET['exist'])) {
+        echo "Ya existe un alumno con este correo electrónico";
+    }
+    ?>
 </body>
 </html>
