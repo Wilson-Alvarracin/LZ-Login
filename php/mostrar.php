@@ -19,7 +19,6 @@ include 'connection.php';
 </head>
 <body>
     <?php
-    //comentario de prueba
     if ($_SESSION['user'] == "admin@fje.edu") {
         if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {
             // Filtrar por materia si se ha seleccionado una
@@ -27,31 +26,25 @@ include 'connection.php';
         } else {
             $filtroMateria = null;
         }
-        
         if (isset($_POST["buscar_nombre"])) {
             // Filtrar por nombre si se ha ingresado un nombre
             $filtroNombre = '%' . $_POST["buscar_nombre"] . '%';
         } else {
             $filtroNombre = null;
         }
-        
         if ($filtroMateria || $filtroNombre) {
             // Consulta SQL con filtro de materia y/o nombre
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                     FROM tbl_alumnos a
                     INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
                     WHERE 1=1";
-            
             if ($filtroMateria) {
                 $sql .= " AND n.materia = ?";
             }
-            
             if ($filtroNombre) {
                 $sql .= " AND a.nombre LIKE ?";
             }
-        
             $stmt = mysqli_prepare($conn, $sql);
-        
             if ($filtroMateria && $filtroNombre) {
                 mysqli_stmt_bind_param($stmt, "ss", $filtroMateria, $filtroNombre);
             } elseif ($filtroMateria) {
@@ -59,7 +52,6 @@ include 'connection.php';
             } else {
                 mysqli_stmt_bind_param($stmt, "s", $filtroNombre);
             }
-        
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
