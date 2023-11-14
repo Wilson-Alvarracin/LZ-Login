@@ -1,6 +1,10 @@
 <?php
 session_start();
 include 'connection.php';
+if (isset($_SESSION["user"])) {
+    header('Location: ./mostrar.php');
+    exit();
+}
 
 if (!isset($_POST['login'])) {
     header('Location: ../index.php');
