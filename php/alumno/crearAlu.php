@@ -34,7 +34,7 @@
     }
     ?>
     <br>
-    <button type="button" class="btn btn-info" onclick="window.location.href='../mostrar.php'">Volver</button>
+    <button type="button" class="btn btn-info" onclick="window.location.href='../mostrar.php'">Volver</button>  
     </div>
 </div>
 </body>
