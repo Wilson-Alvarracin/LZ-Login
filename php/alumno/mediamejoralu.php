@@ -8,12 +8,6 @@ if (!isset($_SESSION["user"])) {
 
 include '../connection.php';
 
-// Desactivamos la autoejecución de consultas
-mysqli_autocommit($conn, false);
-
-// Iniciamos la transacción
-mysqli_begin_transaction($conn, MYSQLI_TRANS_START_READ_WRITE);
-
 // Consulta para obtener los mejores alumnos por materia
 $sql = "SELECT materia, nota AS mejor_nota, nombre AS mejor_alumno
 FROM (
