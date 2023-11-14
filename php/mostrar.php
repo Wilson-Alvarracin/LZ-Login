@@ -82,8 +82,8 @@ include 'connection.php';
 <!-- Botón de Media -->
 <br>
 <!--Final-->
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>;        
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>;
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
 <br>
 <table class="table">
     <thead class="table-dark">

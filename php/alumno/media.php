@@ -12,14 +12,14 @@ include '../connection.php';
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="./javascript/javascript.js"></script>
+    <script src="../../javascript/javascript.js"></script>
     <link rel="stylesheet" href="../../css/test.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>Media</title>
 </head>
 <body>
 <div class="login-card center-mostrar">
-        <div class="row custom-form-container container">
+    <div class="row custom-form-container container">
 <?php
 
   if ($_SESSION['user'] == "admin@fje.edu") {
@@ -88,7 +88,7 @@ include '../connection.php';
   }
 ?>
     <br>
-    <button type="button" class="btn btn-info" onclick="window.location.href='../mostrar.php'">Volver</button>;  
+    <button type="button" class="btn btn-info" onclick="window.location.href='../mostrar.php'">Volver</button>
         </div>
     </div>
 </body>
