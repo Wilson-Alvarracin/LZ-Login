@@ -61,7 +61,7 @@ include '../connection.php';
                             $media_asignatura = $row["media"];
                             echo "<tr>";
                             echo "<th>" . $column_name . "</th>";
-                            echo "<th>" . $media_asignatura . "</th>";
+                            echo "<td style='color: " . ($media_asignatura > 5 ? 'green' : 'red') . ";'>" . $media_asignatura . "</td>";
                             echo "</tr>";
                         }
                         $stmt->close();
@@ -110,7 +110,7 @@ include '../connection.php';
         // Puedes mostrar los resultados o realizar otras acciones aquí
         echo "<tr>";
         echo "<th>". $materia . "</th>";
-        echo "<th>". $mejorNota ."</th>";
+        echo "<td style='color: " . ($mejorNota > 5 ? 'green' : 'red') . ";'>" . $mejorNota . "</td>";
         echo "<th>". $mejorAlumno . "</th>";
         echo "<tr>";
     }
