@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header('Location: ../index.php');
+    header('Location: ./cerrar.php');
+    exit();
 }
 include 'connection.php';
 ?>
@@ -62,7 +63,11 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        } 
+        }
+        $sqlmateria = "SELECT DISTINCT materia FROM tbl_notas;";
+        $stmtmateria = mysqli_prepare($conn, $sqlmateria);
+        mysqli_stmt_execute($stmtmateria);
+        $resultmateria = mysqli_stmt_get_result($stmtmateria);
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
@@ -74,16 +79,20 @@ include 'connection.php';
     <label for="materia">Buscar por Materia:</label>
     <select name="materia">
         <option value="Todo">Todo</option>
-        <option value="Matemáticas">Matemáticas</option>
-        <option value="Historia">Historia</option>
+        <?php
+        foreach ($resultmateria as $rowmateria) {
+            $opmateria = $rowmateria['materia'];
+            echo "<option value='$opmateria'>$opmateria</option>";
+        }
+        ?>
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
 <!-- Botón de Media -->
 <br>
 <!--Final-->
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>;        
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>;
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
 <br>
 <table class="table">
     <thead class="table-dark">
