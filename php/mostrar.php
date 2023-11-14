@@ -4,6 +4,16 @@ if (!isset($_SESSION["user"])) {
     header('Location: ../index.php');
 }
 include 'connection.php';
+// Definir el valor por defecto para el número de usuarios por pantalla
+$numUsuariosPorPagina = 6;
+
+// Verificar si se ha enviado el formulario de filtrado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["num_users"]) && is_numeric($_POST["num_users"])) {
+        // Actualizar el número de usuarios por pantalla si se proporciona un valor numérico
+        $numUsuariosPorPagina = intval($_POST["num_users"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,13 +72,38 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        } 
+        }
+    
+    $sqlBase = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota FROM tbl_alumnos a INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
+    // Consulta SQL sin límite de paginación para obtener el total de registros
+    $sqlTotal = "SELECT COUNT(*) AS total FROM ($sqlBase) AS total_query";
+    $stmtTotal = mysqli_prepare($conn, $sqlTotal);
+    mysqli_stmt_execute($stmtTotal);
+    $resultTotal = mysqli_stmt_get_result($stmtTotal);
+    $totalUsuarios = mysqli_fetch_assoc($resultTotal)['total'];
+
+    // Calcular el total de páginas
+    $totalPaginas = ceil($totalUsuarios / $numUsuariosPorPagina);
+
+    // Obtener el número de página actual
+    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+
+    // Calcular el offset para la consulta SQL
+    $offset = ($paginaActual - 1) * $numUsuariosPorPagina;
+
+    // Consulta SQL con el límite de paginación actualizado y filtro aplicado
+    $sql = "$sqlBase LIMIT $offset, $numUsuariosPorPagina";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
     <div class="row custom-form-container container">
         <div class="responsive-img-center">
 <form method="post">
+    <label for="num_users">Usuarios por pantalla:</label>
+    <input type="number" id="num_users" name="num_users" value="<?php echo $numUsuariosPorPagina; ?>">
     <label for="buscar_nombre">Buscar por Nombre:</label>
     <input type="text" id="buscar_nombre" name="buscar_nombre">
     <label for="materia">Buscar por Materia:</label>
@@ -114,11 +149,17 @@ include 'connection.php';
     </table>
         </div>
     </div>
+    <div class="pagination">
+        <?php
+        for ($i = 1; $i <= $totalPaginas; $i++) {
+            echo "<a href='?pagina=$i'>$i</a> ";
+        }
+        ?>
 </div>
 
     <?php
     //NO TOCAR
-        }
+    }
     ?>
 </div>
 </body>
