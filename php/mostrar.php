@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header('Location: ../index.php');
+    header('Location: ./cerrar.php');
+    exit();
 }
 include 'connection.php';
 // Definir el valor por defecto para el número de usuarios por pantalla
@@ -72,30 +73,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        }
-    
-    $sqlBase = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota FROM tbl_alumnos a INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
-    // Consulta SQL sin límite de paginación para obtener el total de registros
-    $sqlTotal = "SELECT COUNT(*) AS total FROM ($sqlBase) AS total_query";
-    $stmtTotal = mysqli_prepare($conn, $sqlTotal);
-    mysqli_stmt_execute($stmtTotal);
-    $resultTotal = mysqli_stmt_get_result($stmtTotal);
-    $totalUsuarios = mysqli_fetch_assoc($resultTotal)['total'];
-
-    // Calcular el total de páginas
-    $totalPaginas = ceil($totalUsuarios / $numUsuariosPorPagina);
-
-    // Obtener el número de página actual
-    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
-
-    // Calcular el offset para la consulta SQL
-    $offset = ($paginaActual - 1) * $numUsuariosPorPagina;
-
-    // Consulta SQL con el límite de paginación actualizado y filtro aplicado
-    $sql = "$sqlBase LIMIT $offset, $numUsuariosPorPagina";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+        } 
+        $sqlmateria = "SELECT DISTINCT materia FROM tbl_notas;";
+        $stmtmateria = mysqli_prepare($conn, $sqlmateria);
+        mysqli_stmt_execute($stmtmateria);
+        $resultmateria = mysqli_stmt_get_result($stmtmateria);
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
@@ -109,8 +91,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <label for="materia">Buscar por Materia:</label>
     <select name="materia">
         <option value="Todo">Todo</option>
-        <option value="Matemáticas">Matemáticas</option>
-        <option value="Historia">Historia</option>
+        <?php
+        foreach ($resultmateria as $rowmateria) {
+            $opmateria = $rowmateria['materia'];
+            echo "<option value='$opmateria'>$opmateria</option>";
+        }
+        ?>
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
@@ -139,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<th style='font-size: 14px;'>" . $row['nombre'] ."</th>";
         echo "<td style='font-size: 14px;'>" . $row['apellidos'] ."</td>";
         echo "<td style='font-size: 14px;'>" . $row['materia'] . "</td>";
-        echo "<td style='font-size: 14px;'>" . $row['nota'] . "</td>";
+        echo "<td style='font-size: 14px; color: " . ($row['nota'] > 5 ? 'green' : 'red') . ";'>" . $row['nota'] . "</td>";
         echo '<td> <button type="button" class="btn btn-warning" onclick="window.location.href=\'./alumno/modificar.php?id='.$row['id_alumno'].'&materia='.$row['materia'].'\'">Modificar</button> </td>';        
         echo '<td> <button type="button" class="btn btn-danger" onclick="window.location.href=\'./alumno/eliminar.php?id=' . $row['id_alumno'] . '&materia=' . $row['materia'] . '\'">Eliminar</button> </td>';
         echo "</tr>";

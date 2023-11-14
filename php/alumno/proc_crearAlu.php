@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION["user"])) {
+    header('Location: ../mostrar.php');
+    exit();
+}
 include_once('../connection.php');
 
 if (isset($_POST['crear_alumno'])) {
