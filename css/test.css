@@ -198,3 +198,12 @@ img {
     width: 100%;
     margin-left: 10%;
 }
+
+@media (max-width: 1000px) {
+    /* Estilos para pantallas más pequeñas */
+    body {
+        font-size: 14px;
+        /* Ajusta el tamaño de fuente u otros estilos según sea necesario */
+    }
+    /* Agrega más estilos según sea necesario */
+}

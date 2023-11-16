@@ -113,7 +113,7 @@ include 'connection.php';
         echo "<th style='font-size: 14px;'>" . $row['nombre'] ."</th>";
         echo "<td style='font-size: 14px;'>" . $row['apellidos'] ."</td>";
         echo "<td style='font-size: 14px;'>" . $row['materia'] . "</td>";
-        echo "<td style='font-size: 14px; color: " . ($row['nota'] > 5 ? 'green' : 'red') . ";'>" . $row['nota'] . "</td>";
+        echo "<td style='font-size: 14px; color: " . ($row['nota'] >= 5 ? 'green' : 'red') . ";'>" . $row['nota'] . "</td>";
         echo '<td> <button type="button" class="btn btn-warning" onclick="window.location.href=\'./alumno/modificar.php?id='.$row['id_alumno'].'&materia='.$row['materia'].'\'">Modificar</button> </td>';        
         echo '<td> <button type="button" class="btn btn-danger" onclick="window.location.href=\'./alumno/eliminar.php?id=' . $row['id_alumno'] . '&materia=' . $row['materia'] . '\'">Eliminar</button> </td>';
         echo "</tr>";
