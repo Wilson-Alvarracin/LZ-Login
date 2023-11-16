@@ -89,8 +89,8 @@ include 'connection.php';
 </form>
 <br>
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>   
-<button type="button" class="btn btn-success" onclick="window.location.href='./correo.php'">Correo electronico</button>
-<br>
+<!-- <button type="button" class="btn btn-success" onclick="window.location.href='./correo.php'">Correo electronico</button>
+<br> -->
 <table class="table">
     <thead class="table-dark">
         <tr>

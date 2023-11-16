@@ -1,11 +1,11 @@
 <?php
-session_start();
+/* session_start();
 if (!isset($_SESSION["user"])) {
     header('Location: ../index.php');
 }
-include 'connection.php';
+include 'connection.php'; */
 ?>
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -17,10 +17,10 @@ include 'connection.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>Correo electronico</title>
 </head>
-<body>
+<body> -->
     <?php
     //comentario de prueba
-    if ($_SESSION['user'] == "admin@fje.edu") {
+    /* if ($_SESSION['user'] == "admin@fje.edu") {
         if (isset($_POST["buscar_nombre"])) {
             // Filtrar por nombre si se ha ingresado un nombre
             $filtroNombre = '%' . $_POST["buscar_nombre"] . '%';
@@ -52,10 +52,9 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        } 
-        ?> 
-        <!-- <div class="login-card center"> -->
-    <div class="login-card center-mostrar">
+        }  */
+        ?>
+    <!-- <div class="login-card center-mostrar">
     <div class="row custom-form-container container">
         <div class="responsive-img-center">
 <form method="post">
@@ -75,9 +74,10 @@ include 'connection.php';
             <th>Correo</th>
         </tr>
     </thead>
-    <tbody><?php
+    <tbody> -->
+    <?php
     // Recorre los resultados y muestra los datos en la tabla
-    foreach ($result as $row) {
+    /* foreach ($result as $row) {
         echo "<tr>";
         echo "<td><input type='checkbox' name='seleccionados[]' value='" . $row['id_alumno'] . "'></td>";
         echo "<th style='font-size: 14px;'>" . $row['nombre'] ."</th>";
@@ -85,19 +85,19 @@ include 'connection.php';
         echo "<td style='font-size: 14px;'>" . $row['correo_electronico'] . "</td>";
         echo "</tr>";
 
-    }
+    } */
     ?>
-        </tbody>
+        <!-- </tbody>
     </table>
     <button type="button" class="btn btn-danger" onclick="window.location.href='./mostrar.php'">Volver</button>
         </div>
     </div>
-</div>
+</div> -->
 
     <?php
     //NO TOCAR
-        }
+        /* } */
     ?>
-</div>
+<!-- </div>
 </body>
-</html>
+</html> -->
