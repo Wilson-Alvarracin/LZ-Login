@@ -5,6 +5,16 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 include 'connection.php';
+// Definir el valor por defecto para el número de usuarios por pantalla
+$numUsuariosPorPagina = 6;
+
+// Verificar si se ha enviado el formulario de filtrado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["num_users"]) && is_numeric($_POST["num_users"])) {
+        // Actualizar el número de usuarios por pantalla si se proporciona un valor numérico
+        $numUsuariosPorPagina = intval($_POST["num_users"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +73,7 @@ include 'connection.php';
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
-        }
+        } 
         $sqlmateria = "SELECT DISTINCT materia FROM tbl_notas;";
         $stmtmateria = mysqli_prepare($conn, $sqlmateria);
         mysqli_stmt_execute($stmtmateria);
@@ -74,6 +84,8 @@ include 'connection.php';
     <div class="row custom-form-container container">
         <div class="responsive-img-center">
 <form method="post">
+    <label for="num_users">Usuarios por pantalla:</label>
+    <input type="number" id="num_users" name="num_users" value="<?php echo $numUsuariosPorPagina; ?>">
     <label for="buscar_nombre">Buscar por Nombre:</label>
     <input type="text" id="buscar_nombre" name="buscar_nombre">
     <label for="materia">Buscar por Materia:</label>
@@ -123,11 +135,9 @@ include 'connection.php';
     </table>
         </div>
     </div>
-</div>
-
     <?php
     //NO TOCAR
-        }
+    }
     ?>
 </div>
 </body>
