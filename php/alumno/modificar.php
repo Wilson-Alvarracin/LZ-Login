@@ -43,22 +43,40 @@ include '../connection.php';
         } else {
             // Consulta para obtener la calificación actual
             
-            $sql = "SELECT nota FROM tbl_notas WHERE id_alumno = ? AND materia = ?";
+            $sql = "SELECT a.*, n.materia, n.nota
+            FROM tbl_alumnos a
+            INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
+            WHERE a.id_alumno = ? AND n.materia = ?";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "ss", $idAlumno, $materia);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($result);
-            $NotaActual = $row['nota'];
+        // Consulta para obtener la calificación actual
+            $nombre = $row['nombre'];
+            $apellidos = $row['apellidos'];
+            $fechaNacimiento = $row['fecha_nacimiento'];
+            $correoElectronico = $row['correo_electronico'];
+            $materia = $row['materia'];
+            $nota = $row['nota'];
+            // Aquí continúas con el código para mostrar los datos y el formulario de modificación
+            echo "<p>Datos del alumno:</p>";
+            echo "<p>Nombre: $nombre</p>";
+            echo "<p>Apellidos: $apellidos</p>";
+            echo "<p>Fecha de Nacimiento: $fechaNacimiento</p>";
+            echo "<p>Correo Electrónico: $correoElectronico</p>";
+            echo "<p>Materia: $materia</p>";
+            echo "<p>Nota: $nota</p>";
             // Formulario para modificar la calificación
             echo "<p>Modificando la calificación en la materia: $materia</p >";
             echo "<form method='post'>";
             echo "<label for='nuevaNota'>Nueva Calificación:</label>";
-            echo "<input type='text' name='nuevaNota' value='$NotaActual'>";
+            echo "<input type='text' name='nuevaNota' value='$nota'>";
             echo "<button type='submit'>Guardar</button>";
             echo "</form>";
+        
             if (isset($_GET['error'])) {
-                echo "La nota que has puesto no es valida";
+                echo "La nota que has puesto no es válida";
             }
         }
     } else {
