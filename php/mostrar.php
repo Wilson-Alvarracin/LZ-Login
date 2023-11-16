@@ -135,14 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </table>
         </div>
     </div>
-    <div class="pagination">
-        <?php
-        for ($i = 1; $i <= $totalPaginas; $i++) {
-            echo "<a href='?pagina=$i'>$i</a> ";
-        }
-        ?>
-</div>
-
     <?php
     //NO TOCAR
     }
