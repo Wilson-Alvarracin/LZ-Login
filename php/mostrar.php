@@ -26,11 +26,11 @@ include 'connection.php';
         $pagina_actual = 1;
 
         // Verificar si se proporcionaron valores en la URL
-        if (isset($_GET['por_pagina'])) {
+        if (isset($_GET['por_pagina']) && $_GET['por_pagina'] != NULL) {
             $por_pagina = $_GET['por_pagina'];
         }
 
-        if (isset($_GET['pagina'])) {
+        if (isset($_GET['pagina']) && $_GET['pagina'] != NULL) {
             $pagina_actual = $_GET['pagina'];
         }
         // Calcular el inicio de la paginación
@@ -89,15 +89,17 @@ include 'connection.php';
     <div class="login-card center-mostrar">
     <div class="row custom-form-container container">
     <div class="responsive-img-center">
+    <button type="submit" value='Actualizar'><a href="./cerrar.php" style ="text-decoration: none; color: black;">Cerrar Session</a></button>
     <form method='get' action='mostrar.php'>
         <label for="por_pagina">Usuarios por pantalla</label>
         <input type='number' name='por_pagina' value=<?php echo $por_pagina ?> min='1' max='20'>
         <button type="submit" value='Actualizar'>Actualizar</button>
     </form>
+    
     <br>
     <form method="post">
     <label for="buscar_nombre">Buscar por Nombre:</label>
-    <input type="text" id="buscar_nombre" name="buscar_nombre">
+    <input type="text" id="buscar_nombre" name="buscar_nombre" required>
     <label for="materia">Buscar por Materia:</label>
     <select name="materia">
         <option value="Todo">Todo</option>
