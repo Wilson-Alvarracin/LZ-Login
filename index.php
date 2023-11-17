@@ -9,6 +9,30 @@
     <link rel="stylesheet" href="./css/test.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>Login</title>
+    <style>
+        
+@media (max-width: 860px) {
+    .column-2 {
+        width: 100%;
+    }
+    .center {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    .custom-form-container {
+        width: auto;
+    }
+    .responsive-img-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12%;
+    }
+    img {
+        width: 80%;
+    }
+}
+    </style>
 </head>
 
 <body>

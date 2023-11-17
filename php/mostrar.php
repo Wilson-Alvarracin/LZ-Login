@@ -27,8 +27,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../css/test.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <title>Alumno</title>
+    <style>
+    .responsive-img-center {
+        padding: 0px;
+        margin-left: 0px;
+    }
+
+    .center-mostrar {
+        padding: 0px;
+        margin-left: 0px;
+    }
+    @media (max-width: 860px) {
+    input,
+    select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+}
+
+
+</style>
 </head>
 <body>
+    <style>
+        
+    </style>
     <?php
     if ($_SESSION['user'] == "admin@fje.edu") {
         if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {

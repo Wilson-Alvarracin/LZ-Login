@@ -161,28 +161,6 @@ img {
     margin-top: 0%;
 }
 
-@media (max-width: 860px) {
-    .column-2 {
-        width: 100%;
-    }
-    .center {
-        margin-left: 10%;
-        margin-right: 10%;
-    }
-    .custom-form-container {
-        width: auto;
-    }
-    .responsive-img-center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 12%;
-    }
-    img {
-        width: 80%;
-    }
-}
-
 .azul {
     color: blue;
 }
@@ -197,13 +175,4 @@ img {
 .container {
     width: 100%;
     margin-left: 10%;
-}
-
-@media (max-width: 1000px) {
-    /* Estilos para pantallas más pequeñas */
-    body {
-        font-size: 14px;
-        /* Ajusta el tamaño de fuente u otros estilos según sea necesario */
-    }
-    /* Agrega más estilos según sea necesario */
 }
