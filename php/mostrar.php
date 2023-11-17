@@ -5,16 +5,6 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 include 'connection.php';
-// Definir el valor por defecto para el número de usuarios por pantalla
-$numUsuariosPorPagina = 6;
-
-// Verificar si se ha enviado el formulario de filtrado
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["num_users"]) && is_numeric($_POST["num_users"])) {
-        // Actualizar el número de usuarios por pantalla si se proporciona un valor numérico
-        $numUsuariosPorPagina = intval($_POST["num_users"]);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php
     if ($_SESSION['user'] == "admin@fje.edu") {
+        // Inicializar variables de paginación
+        $por_pagina = 10;
+        $pagina_actual = 1;
+
+        // Verificar si se proporcionaron valores en la URL
+        if (isset($_GET['por_pagina'])) {
+            $por_pagina = $_GET['por_pagina'];
+        }
+
+        if (isset($_GET['pagina'])) {
+            $pagina_actual = $_GET['pagina'];
+        }
+        // Calcular el inicio de la paginación
+        $inicio = ($pagina_actual -1 ) * $por_pagina;
+
         if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {
             // Filtrar por materia si se ha seleccionado una
             $filtroMateria = $_POST["materia"];
@@ -69,8 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Consulta SQL sin filtro (mostrar todos los resultados)
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                     FROM tbl_alumnos a
-                    INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
+                    INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno LIMIT ?, ?";
             $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ii", $inicio, $por_pagina);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } 
@@ -82,10 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
     <div class="row custom-form-container container">
-        <div class="responsive-img-center">
-<form method="post">
-    <label for="num_users">Usuarios por pantalla:</label>
-    <input type="number" id="num_users" name="num_users" value="<?php echo $numUsuariosPorPagina; ?>">
+    <div class="responsive-img-center">
+    <form method='get' action='mostrar.php'>
+        <label for="por_pagina">Usuarios por pantalla</label>
+        <input type='number' name='por_pagina' value=<?php echo $por_pagina ?> min='1' max='20'>
+        <button type="submit" value='Actualizar'>Actualizar</button>
+    </form>
+    <br>
+    <form method="post">
     <label for="buscar_nombre">Buscar por Nombre:</label>
     <input type="text" id="buscar_nombre" name="buscar_nombre">
     <label for="materia">Buscar por Materia:</label>
@@ -106,6 +116,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
 <br>
+<?php
+$sql = "SELECT COUNT(*) as total FROM tbl_alumnos";
+$resultado = mysqli_query($conn, $sql);
+$total_registros = mysqli_fetch_assoc($resultado)['total'];
+$total_paginas = ceil($total_registros / $por_pagina);
+
+echo "<br>Páginas: ";
+for ($i = 1; $i <= $total_paginas; $i++) {
+    echo "<a href='?pagina=$i&por_pagina=$por_pagina'>$i</a> ";
+}
+?>
 <table class="table">
     <thead class="table-dark">
         <tr>
