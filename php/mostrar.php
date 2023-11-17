@@ -112,10 +112,10 @@ include 'connection.php';
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
+<br>
 <!-- Botón de Media -->
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>   
 <!-- <button type="button" class="btn btn-success" onclick="window.location.href='./correo.php'">Correo electronico</button>-->
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
 <button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
 <br>
 <?php
