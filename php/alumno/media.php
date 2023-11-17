@@ -110,7 +110,7 @@ include '../connection.php';
         // Puedes mostrar los resultados o realizar otras acciones aquí
         echo "<tr>";
         echo "<th>". $materia . "</th>";
-        echo "<td style='color: " . ($mejorNota > 5 ? 'green' : 'red') . ";'>" . $mejorNota . "</td>";
+        echo "<td style='color: " . ($mejorNota >= 5 ? 'green' : 'red') . ";'>" . $mejorNota . "</td>";
         echo "<th>". $mejorAlumno . "</th>";
         echo "<tr>";
     }
