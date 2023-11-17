@@ -114,21 +114,6 @@ include 'connection.php';
 </form>
 <!-- Botón de Media -->
 <br>
-<!--Final-->
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
-<br>
-<?php
-$sql = "SELECT COUNT(*) as total FROM tbl_alumnos";
-$resultado = mysqli_query($conn, $sql);
-$total_registros = mysqli_fetch_assoc($resultado)['total'];
-$total_paginas = ceil($total_registros / $por_pagina);
-
-echo "<br>Páginas: ";
-for ($i = 1; $i <= $total_paginas; $i++) {
-    echo "<a href='?pagina=$i&por_pagina=$por_pagina'>$i</a> ";
-}
-?>
 <table class="table">
     <thead class="table-dark">
         <tr>
@@ -143,7 +128,6 @@ for ($i = 1; $i <= $total_paginas; $i++) {
     <tbody><?php
     // Recorre los resultados y muestra los datos en la tabla
     foreach ($result as $row) {
-        // var_dump($row);
         echo "<tr>";
         echo "<th style='font-size: 14px;'>" . $row['nombre'] ."</th>";
         echo "<td style='font-size: 14px;'>" . $row['apellidos'] ."</td>";
