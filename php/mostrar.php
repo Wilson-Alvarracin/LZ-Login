@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header('Location: ../index.php');
+    header('Location: ./cerrar.php');
+    exit();
 }
 include 'connection.php';
 ?>
@@ -19,39 +20,47 @@ include 'connection.php';
 </head>
 <body>
     <?php
-    //comentario de prueba
     if ($_SESSION['user'] == "admin@fje.edu") {
+        // Inicializar variables de paginación
+        $por_pagina = 10;
+        $pagina_actual = 1;
+
+        // Verificar si se proporcionaron valores en la URL
+        if (isset($_GET['por_pagina']) && $_GET['por_pagina'] != NULL) {
+            $por_pagina = $_GET['por_pagina'];
+        }
+
+        if (isset($_GET['pagina']) && $_GET['pagina'] != NULL) {
+            $pagina_actual = $_GET['pagina'];
+        }
+        // Calcular el inicio de la paginación
+        $inicio = ($pagina_actual -1 ) * $por_pagina;
+
         if (isset($_POST["materia"]) && $_POST["materia"] != "Todo") {
             // Filtrar por materia si se ha seleccionado una
             $filtroMateria = $_POST["materia"];
         } else {
             $filtroMateria = null;
         }
-        
         if (isset($_POST["buscar_nombre"])) {
             // Filtrar por nombre si se ha ingresado un nombre
             $filtroNombre = '%' . $_POST["buscar_nombre"] . '%';
         } else {
             $filtroNombre = null;
         }
-        
         if ($filtroMateria || $filtroNombre) {
             // Consulta SQL con filtro de materia y/o nombre
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                     FROM tbl_alumnos a
                     INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno
                     WHERE 1=1";
-            
             if ($filtroMateria) {
                 $sql .= " AND n.materia = ?";
             }
-            
             if ($filtroNombre) {
                 $sql .= " AND a.nombre LIKE ?";
             }
-        
             $stmt = mysqli_prepare($conn, $sql);
-        
             if ($filtroMateria && $filtroNombre) {
                 mysqli_stmt_bind_param($stmt, "ss", $filtroMateria, $filtroNombre);
             } elseif ($filtroMateria) {
@@ -59,38 +68,52 @@ include 'connection.php';
             } else {
                 mysqli_stmt_bind_param($stmt, "s", $filtroNombre);
             }
-        
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } else {
             // Consulta SQL sin filtro (mostrar todos los resultados)
             $sql = "SELECT a.id_alumno, a.nombre, a.apellidos, n.materia, n.nota
                     FROM tbl_alumnos a
-                    INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno";
+                    INNER JOIN tbl_notas n ON a.id_alumno = n.id_alumno LIMIT ?, ?";
             $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ii", $inicio, $por_pagina);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
         } 
+        $sqlmateria = "SELECT DISTINCT materia FROM tbl_notas;";
+        $stmtmateria = mysqli_prepare($conn, $sqlmateria);
+        mysqli_stmt_execute($stmtmateria);
+        $resultmateria = mysqli_stmt_get_result($stmtmateria);
         ?> 
         <!-- <div class="login-card center"> -->
     <div class="login-card center-mostrar">
     <div class="row custom-form-container container">
-        <div class="responsive-img-center">
-<form method="post">
+    <div class="responsive-img-center">
+    <button type="submit" value='Actualizar'><a href="./cerrar.php" style ="text-decoration: none; color: black;">Cerrar Session</a></button>
+    <form method='get' action='mostrar.php'>
+        <label for="por_pagina">Usuarios por pantalla</label>
+        <input type='number' name='por_pagina' value=<?php echo $por_pagina ?> min='1' max='20'>
+        <button type="submit" value='Actualizar'>Actualizar</button>
+    </form>
+    
+    <br>
+    <form method="post">
     <label for="buscar_nombre">Buscar por Nombre:</label>
-    <input type="text" id="buscar_nombre" name="buscar_nombre">
+    <input type="text" id="buscar_nombre" name="buscar_nombre" required>
     <label for="materia">Buscar por Materia:</label>
     <select name="materia">
         <option value="Todo">Todo</option>
-        <option value="Matemáticas">Matemáticas</option>
-        <option value="Historia">Historia</option>
+        <?php
+        foreach ($resultmateria as $rowmateria) {
+            $opmateria = $rowmateria['materia'];
+            echo "<option value='$opmateria'>$opmateria</option>";
+        }
+        ?>
     </select>
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
+<!-- Botón de Media -->
 <br>
-<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>   
-<!-- <button type="button" class="btn btn-success" onclick="window.location.href='./correo.php'">Correo electronico</button>
-<br> -->
 <table class="table">
     <thead class="table-dark">
         <tr>
@@ -109,7 +132,7 @@ include 'connection.php';
         echo "<th style='font-size: 14px;'>" . $row['nombre'] ."</th>";
         echo "<td style='font-size: 14px;'>" . $row['apellidos'] ."</td>";
         echo "<td style='font-size: 14px;'>" . $row['materia'] . "</td>";
-        echo "<td style='font-size: 14px;'>" . $row['nota'] . "</td>";
+        echo "<td style='font-size: 14px; color: " . ($row['nota'] >= 5 ? 'green' : 'red') . ";'>" . $row['nota'] . "</td>";
         echo '<td> <button type="button" class="btn btn-warning" onclick="window.location.href=\'./alumno/modificar.php?id='.$row['id_alumno'].'&materia='.$row['materia'].'\'">Modificar</button> </td>';        
         echo '<td> <button type="button" class="btn btn-danger" onclick="window.location.href=\'./alumno/eliminar.php?id=' . $row['id_alumno'] . '&materia=' . $row['materia'] . '\'">Eliminar</button> </td>';
         echo "</tr>";
@@ -119,11 +142,9 @@ include 'connection.php';
     </table>
         </div>
     </div>
-</div>
-
     <?php
     //NO TOCAR
-        }
+    }
     ?>
 </div>
 </body>
