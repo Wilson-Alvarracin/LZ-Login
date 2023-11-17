@@ -113,6 +113,22 @@ include 'connection.php';
     <button type="submit" name="filtro_materia" value="Filtrar">Filtrar</button>
 </form>
 <!-- Botón de Media -->
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button>   
+<!-- <button type="button" class="btn btn-success" onclick="window.location.href='./correo.php'">Correo electronico</button>-->
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/crearAlu.php'">Crear Alumno</button> 
+<button type="button" class="btn btn-info" onclick="window.location.href='./alumno/media.php'">Media</button>
+<br>
+<?php
+$sql = "SELECT COUNT(*) as total FROM tbl_alumnos";
+$resultado = mysqli_query($conn, $sql);
+$total_registros = mysqli_fetch_assoc($resultado)['total'];
+$total_paginas = ceil($total_registros / $por_pagina);
+
+echo "<br>Páginas: ";
+for ($i = 1; $i <= $total_paginas; $i++) {
+    echo "<a href='?pagina=$i&por_pagina=$por_pagina'>$i</a> ";
+}
+?>
 <br>
 <table class="table">
     <thead class="table-dark">
